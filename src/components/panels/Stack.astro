@@ -1,0 +1,96 @@
+---
+import { Icon } from "astro-icon/components";
+
+// stack.json — dependencies framed as a manifest, with real tech logos.
+// Each group carries its own accent tone.
+const groups = [
+  {
+    label: "frontend",
+    tone: "var(--syn-name)",
+    items: [
+      { name: "TypeScript", icon: "simple-icons:typescript" },
+      { name: "React", icon: "simple-icons:react" },
+      { name: "Astro", icon: "simple-icons:astro" },
+      { name: "Tailwind CSS", icon: "simple-icons:tailwindcss" },
+    ],
+  },
+  {
+    label: "backend",
+    tone: "var(--syn-str)",
+    items: [
+      { name: "Node.js", icon: "simple-icons:nodedotjs" },
+      { name: "Python", icon: "simple-icons:python" },
+      { name: "PostgreSQL", icon: "simple-icons:postgresql" },
+      { name: "Supabase", icon: "simple-icons:supabase" },
+    ],
+  },
+  {
+    label: "infra",
+    tone: "var(--syn-key)",
+    items: [
+      { name: "Docker", icon: "simple-icons:docker" },
+      { name: "Vercel", icon: "simple-icons:vercel" },
+      { name: "Git", icon: "simple-icons:git" },
+    ],
+  },
+];
+---
+
+<div class="stack">
+  <p class="eyebrow"><Icon name="lucide:braces" /> package.json — dependencies</p>
+  <div class="stack__grid">
+    {groups.map((g) => (
+      <section class="grp" style={`--grp:${g.tone}`}>
+        <h3 class="grp__label"><span class="grp__hash">#</span>{g.label}</h3>
+        <ul class="grp__list">
+          {g.items.map((it) => (
+            <li class="chip">
+              <Icon name={it.icon} class="chip__icon" />
+              <span>{it.name}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</div>
+
+<style>
+  .stack { height: 100%; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+  .stack__grid {
+    margin-top: 1.4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 0.9rem;
+    align-content: start;
+  }
+  .grp {
+    background: color-mix(in srgb, var(--ink-800) 60%, transparent);
+    border: 1px solid var(--line);
+    border-left: 2px solid color-mix(in srgb, var(--grp, var(--mint)) 70%, transparent);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+  }
+  .grp__label {
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--text);
+    margin-bottom: 0.9rem;
+  }
+  .grp__hash { color: var(--grp, var(--mint)); margin-right: 0.3rem; }
+  .grp__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--text-dim);
+    padding: 0.4rem 0.55rem;
+    border-radius: 7px;
+    transition: color 0.16s ease, background 0.16s ease;
+  }
+  .chip:hover { color: var(--text); background: var(--ink-700); }
+  .chip__icon { width: 1.05em; height: 1.05em; color: var(--grp, var(--mint-dim)); flex: none; transition: color 0.16s ease; opacity: 0.85; }
+  .chip:hover .chip__icon { opacity: 1; }
+</style>

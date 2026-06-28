@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7DE2D1"/>
+      <stop offset="55%" stop-color="#82AAFF"/>
+      <stop offset="100%" stop-color="#C792EA"/>
+    </linearGradient>
+    <radialGradient id="amb" cx="80%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#7DE2D1" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#7DE2D1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0B0E14"/>
+  <g stroke="#0E121B" stroke-width="1">
+    <path d="M0 70H1200M0 140H1200M0 210H1200M0 280H1200M0 350H1200M0 420H1200M0 490H1200M0 560H1200"/>
+    <path d="M80 0V630M160 0V630M240 0V630M320 0V630M400 0V630M480 0V630M560 0V630M640 0V630M720 0V630M800 0V630M880 0V630M960 0V630M1040 0V630M1120 0V630"/>
+  </g>
+  <rect width="1200" height="630" fill="url(#amb)"/>
+
+  <!-- window chrome -->
+  <rect x="64" y="64" width="1072" height="502" rx="20" fill="#0E121B" stroke="#232C40" stroke-width="2"/>
+  <rect x="64" y="64" width="1072" height="52" rx="20" fill="#11151F"/>
+  <rect x="64" y="96" width="1072" height="20" fill="#11151F"/>
+  <circle cx="100" cy="90" r="7" fill="#ff6f6f"/>
+  <circle cx="124" cy="90" r="7" fill="#ffcb6b"/>
+  <circle cx="148" cy="90" r="7" fill="#7DE2D1"/>
+  <text x="188" y="95" font-family="JetBrains Mono, monospace" font-size="18" fill="#5A6680">&gt;_ viriato.site</text>
+
+  <!-- code body -->
+  <text font-family="JetBrains Mono, monospace" font-size="20" fill="#5A6680">
+    <tspan x="112" y="176">1</tspan><tspan x="112" y="212">2</tspan><tspan x="112" y="248">3</tspan><tspan x="112" y="284">4</tspan><tspan x="112" y="320">5</tspan>
+  </text>
+  <text font-family="JetBrains Mono, monospace" font-size="20">
+    <tspan x="160" y="176" fill="#5A6680">// portfólio</tspan>
+    <tspan x="160" y="248" fill="#C792EA">const</tspan><tspan fill="#82AAFF"> developer</tspan><tspan fill="#D6DEEC"> = {</tspan>
+    <tspan x="196" y="284" fill="#FFCB6B">disponivel</tspan><tspan fill="#D6DEEC">: </tspan><tspan fill="#F78C6C">true</tspan><tspan fill="#D6DEEC">,</tspan>
+    <tspan x="160" y="320" fill="#D6DEEC">};</tspan>
+  </text>
+
+  <!-- headline -->
+  <text x="112" y="430" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="68" fill="#D6DEEC">Viriato</text>
+  <text x="112" y="486" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="40" fill="url(#glow)">Desenvolvedor Full-stack</text>
+  <text x="112" y="528" font-family="Inter, sans-serif" font-size="24" fill="#8A95AC">Construo produtos web do banco à interface.</text>
+
+  <!-- accent bracket -->
+  <path d="M980 360l44 48-44 48" fill="none" stroke="#7DE2D1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="1044" y1="456" x2="1090" y2="456" stroke="#7DE2D1" stroke-width="14" stroke-linecap="round"/>
+</svg>

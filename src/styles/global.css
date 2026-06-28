@@ -1,0 +1,127 @@
+:root {
+  /* ---- Palette: deep ink + mint accent ---- */
+  --ink-900: #0B0E14;   /* app background */
+  --ink-850: #0E121B;   /* window base */
+  --ink-800: #11151F;   /* raised surface / titlebar */
+  --ink-750: #141926;   /* tab bar */
+  --ink-700: #161B27;   /* panels / active tab */
+  --ink-600: #1F2636;   /* border / hover */
+  --line:    #232C40;   /* hairline */
+
+  --text:    #D6DEEC;   /* primary text */
+  --text-dim:#8A95AC;   /* secondary text */
+  --text-faint:#5A6680; /* labels, gutters */
+
+  --mint:    #7DE2D1;   /* signature accent */
+  --mint-dim:#4FBFAE;
+
+  /* syntax colors — used ONLY inside code, tied to meaning */
+  --syn-key:  #C792EA;  /* keyword */
+  --syn-name: #82AAFF;  /* identifier */
+  --syn-str:  #C3E88D;  /* string */
+  --syn-num:  #F78C6C;  /* number / boolean */
+  --syn-prop: #FFCB6B;  /* property */
+  --syn-com:  #5A6680;  /* comment */
+
+  /* ---- Type ---- */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* ---- Scale ---- */
+  --step--2: 0.72rem;
+  --step--1: clamp(0.76rem, 0.72rem + 0.2vw, 0.84rem);
+  --step-0:  clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
+  --step-1:  clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
+  --step-2:  clamp(1.5rem, 1.1rem + 1.7vw, 2.4rem);
+  --step-3:  clamp(2rem, 1.3rem + 3vw, 3.6rem);
+
+  /* ---- IDE chrome metrics ---- */
+  --titlebar-h: 44px;
+  --tabbar-h: 40px;
+  --statusbar-h: 30px;
+  --explorer-w: clamp(200px, 18vw, 260px);
+  --bottombar-h: 60px;
+  --radius: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { height: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--ink-900);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image:
+    radial-gradient(60vw 60vw at 80% -10%, color-mix(in srgb, var(--mint) 7%, transparent), transparent 60%),
+    linear-gradient(var(--ink-850) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ink-850) 1px, transparent 1px);
+  background-size: auto, 64px 64px, 64px 64px;
+  background-position: 0 0, -1px -1px, -1px -1px;
+}
+
+/* Desktop: lock the viewport, the workspace fills the screen, no page scroll */
+@media (min-width: 769px) {
+  html, body { height: 100%; overflow: hidden; }
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+::selection { background: var(--mint); color: var(--ink-900); }
+
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+[hidden] { display: none !important; }
+
+/* shared eyebrow used inside panels */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--mint);
+  color: var(--ink-900);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  z-index: 100;
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

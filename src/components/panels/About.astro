@@ -1,0 +1,104 @@
+---
+// about.ts — the signature panel. A real `const developer` object that types in.
+const lines = [
+  { n: 1, html: `<span class="c">/**</span>` },
+  { n: 2, html: `<span class="c"> * Desenvolvedor full-stack.</span>` },
+  { n: 3, html: `<span class="c"> * Construo produtos web do banco à interface.</span>` },
+  { n: 4, html: `<span class="c"> */</span>` },
+  { n: 5, html: `<span class="k">const</span> <span class="nm">developer</span> = {` },
+  { n: 6, html: `&nbsp;&nbsp;<span class="p">nome</span>: <span class="s">'Viriato'</span>,` },
+  { n: 7, html: `&nbsp;&nbsp;<span class="p">cargo</span>: <span class="s">'Full-stack Developer'</span>,` },
+  { n: 8, html: `&nbsp;&nbsp;<span class="p">foco</span>: [<span class="s">'web'</span>, <span class="s">'APIs'</span>, <span class="s">'produto'</span>],` },
+  { n: 9, html: `&nbsp;&nbsp;<span class="p">disponivel</span>: <span class="nu">true</span>,` },
+  { n: 10, html: `};` },
+];
+---
+
+<div class="about">
+  <pre class="code"><code>{lines.map((l) => (
+    <span class="ln" style={`--ln:${l.n - 1}`}><span class="gutter">{l.n}</span><span class="src" set:html={l.html} /></span>
+  ))}<span class="ln ln--cursor" style="--ln:10"><span class="gutter">11</span><span class="src"><span class="cursor"></span></span></span></code></pre>
+
+  <div class="about__cta">
+    <button class="btn btn--solid" data-file="contact.sh" type="button">
+      <span>falar comigo</span>
+    </button>
+    <button class="btn btn--ghost" data-file="work" type="button">
+      <span>ver projetos</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .about { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+  .code {
+    margin: 0;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    font-family: var(--font-mono);
+    font-size: clamp(0.82rem, 0.7rem + 0.55vw, 1.05rem);
+    line-height: 2;
+  }
+  .ln { display: flex; align-items: baseline; white-space: pre; }
+  .gutter {
+    width: 2.6ch;
+    flex: none;
+    text-align: right;
+    margin-right: 1.3rem;
+    color: var(--text-faint);
+    opacity: 0.6;
+    user-select: none;
+  }
+  .src { flex: 1; }
+  .c  { color: var(--syn-com); font-style: italic; }
+  .k  { color: var(--syn-key); }
+  .nm { color: var(--syn-name); }
+  .p  { color: var(--syn-prop); }
+  .s  { color: var(--syn-str); }
+  .nu { color: var(--syn-num); }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background: var(--mint);
+    vertical-align: middle;
+    animation: blink 1.05s step-end infinite;
+  }
+
+  .about__cta { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem; }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    padding: 0.6rem 1.1rem;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn--solid { background: var(--mint); color: var(--ink-900); font-weight: 700; }
+  .btn--solid::before { content: "›"; color: var(--ink-900); font-weight: 700; }
+  .btn--solid:hover { background: #93ecdc; }
+  .btn--ghost { color: var(--text); border-color: var(--ink-600); }
+  .btn--ghost::before { content: "$"; color: var(--mint-dim); }
+  .btn--ghost:hover { border-color: var(--mint); color: var(--mint); }
+
+  /* typing: lines reveal in sequence when the panel becomes active */
+  :global([data-panel="about.ts"].is-active) .ln {
+    opacity: 0;
+    transform: translateY(3px);
+    animation: type 0.34s ease forwards;
+    animation-delay: calc(var(--ln) * 0.11s + 0.15s);
+  }
+  @keyframes type { to { opacity: 1; transform: none; } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global([data-panel="about.ts"].is-active) .ln { opacity: 1; transform: none; animation: none; }
+    .cursor { animation: none; }
+  }
+</style>

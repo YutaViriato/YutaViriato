@@ -1,0 +1,193 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = "Viriato — Desenvolvedor Full-stack",
+  description = "Desenvolvedor full-stack. Construo produtos web do banco de dados à interface.",
+} = Astro.props;
+
+import "../styles/global.css";
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Viriato",
+  url: canonical.href,
+  jobTitle: "Desenvolvedor Full-stack",
+  description,
+  image: ogImage.href,
+  knowsAbout: ["TypeScript", "React", "Node.js", "PostgreSQL", "Astro", "Docker"],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Viriato" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0B0E14" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="viriato.site" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="viriato.site — workspace de desenvolvedor" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personLd)} is:inline />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <slot />
+
+    <script>
+      const FILES = ["about.ts", "stack.json", "work", "contact.sh"];
+
+      const tabs = Array.from(document.querySelectorAll<HTMLElement>(".tab"));
+      const panels = Array.from(document.querySelectorAll<HTMLElement>(".panel"));
+      const treeNodes = Array.from(document.querySelectorAll<HTMLElement>(".node[data-file]"));
+      const bnavs = Array.from(document.querySelectorAll<HTMLElement>(".bnav"));
+      const statusLang = document.getElementById("status-lang");
+      const crumbFile = document.getElementById("crumb-file");
+
+      const LANG: Record<string, string> = {
+        "about.ts": "TypeScript",
+        "stack.json": "JSON",
+        "work": "TSX",
+        "contact.sh": "Shell",
+      };
+
+      const CRUMB: Record<string, string> = {
+        "about.ts": "about.ts",
+        "stack.json": "stack.json",
+        "work": "work/",
+        "contact.sh": "contact.sh",
+      };
+
+      function panelFor(file: string) {
+        return panels.find((p) => p.dataset.panel === file) || null;
+      }
+
+      function activate(file: string, target?: string | null) {
+        if (!FILES.includes(file)) return;
+
+        // panels
+        panels.forEach((p) => {
+          const on = p.dataset.panel === file;
+          p.hidden = !on;
+          p.classList.toggle("is-active", on);
+        });
+
+        // desktop tabs
+        tabs.forEach((t) => {
+          const on = t.dataset.file === file;
+          t.setAttribute("aria-selected", String(on));
+          t.tabIndex = on ? 0 : -1;
+        });
+
+        // tree nodes
+        treeNodes.forEach((n) => {
+          n.setAttribute("aria-current", String(n.dataset.file === file && !n.dataset.target));
+        });
+
+        // bottom nav
+        bnavs.forEach((b) => b.setAttribute("aria-selected", String(b.dataset.file === file)));
+
+        // status bar language
+        if (statusLang) statusLang.textContent = LANG[file] ?? "Plain";
+
+        // titlebar breadcrumb reflects the open file
+        if (crumbFile) crumbFile.textContent = CRUMB[file] ?? file;
+
+        // highlight a specific project card when chosen from the tree
+        if (file === "work" && target) {
+          const card = document.getElementById(`proj-${target}`);
+          document.querySelectorAll(".card.is-target").forEach((c) => c.classList.remove("is-target"));
+          if (card) {
+            card.classList.add("is-target");
+            card.focus({ preventScroll: true });
+          }
+        }
+      }
+
+      // Click wiring: tabs, tree nodes, bottom nav, and in-panel CTAs (data-file)
+      function bindOpeners(els: HTMLElement[]) {
+        els.forEach((el) => {
+          el.addEventListener("click", () => activate(el.dataset.file!, el.dataset.target));
+        });
+      }
+      bindOpeners(tabs);
+      bindOpeners(treeNodes);
+      bindOpeners(bnavs);
+      document.querySelectorAll<HTMLElement>("[data-file]").forEach((el) => {
+        if (!el.classList.contains("tab") && !el.classList.contains("node") && !el.classList.contains("bnav")) {
+          el.addEventListener("click", () => activate(el.dataset.file!, el.dataset.target));
+        }
+      });
+
+      // Keyboard: arrow navigation across the desktop tablist (ARIA pattern)
+      const tablist = document.querySelector('[role="tablist"]');
+      tablist?.addEventListener("keydown", (e) => {
+        const ev = e as KeyboardEvent;
+        const idx = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+        let next = idx;
+        if (ev.key === "ArrowRight") next = (idx + 1) % tabs.length;
+        else if (ev.key === "ArrowLeft") next = (idx - 1 + tabs.length) % tabs.length;
+        else if (ev.key === "Home") next = 0;
+        else if (ev.key === "End") next = tabs.length - 1;
+        else return;
+        ev.preventDefault();
+        const file = tabs[next].dataset.file!;
+        activate(file);
+        tabs[next].focus();
+      });
+
+      // status bar cursor position follows the active panel's scroll a touch
+      const statusPos = document.getElementById("status-pos");
+      const editor = document.querySelector(".editor");
+      editor?.addEventListener(
+        "scroll",
+        () => {
+          if (statusPos) {
+            const ln = Math.max(1, Math.round((editor.scrollTop / 18) + 1));
+            statusPos.textContent = `Ln ${ln}, Col 1`;
+          }
+        },
+        { passive: true, capture: true }
+      );
+    </script>
+  </body>
+</html>

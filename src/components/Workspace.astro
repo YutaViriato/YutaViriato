@@ -1,0 +1,186 @@
+---
+import { Icon } from "astro-icon/components";
+import TitleBar from "./TitleBar.astro";
+import Explorer from "./Explorer.astro";
+import StatusBar from "./StatusBar.astro";
+import About from "./panels/About.astro";
+import Stack from "./panels/Stack.astro";
+import Work from "./panels/Work.astro";
+import Contact from "./panels/Contact.astro";
+
+const tabs = [
+  { file: "about.ts", icon: "lucide:file-code", closable: true },
+  { file: "stack.json", icon: "lucide:braces" },
+  { file: "work", icon: "lucide:folder" },
+  { file: "contact.sh", icon: "lucide:terminal" },
+];
+
+const bottom = [
+  { file: "about.ts", icon: "lucide:user", label: "sobre" },
+  { file: "stack.json", icon: "lucide:braces", label: "stack" },
+  { file: "work", icon: "lucide:folder", label: "work" },
+  { file: "contact.sh", icon: "lucide:mail", label: "contato" },
+];
+---
+
+<div class="workspace">
+  <TitleBar />
+  <Explorer />
+
+  <main class="main" id="conteudo">
+    <div class="tabbar" role="tablist" aria-label="Painéis abertos">
+      {tabs.map((t, i) => (
+        <button
+          class="tab"
+          role="tab"
+          id={`tab-${t.file}`}
+          data-file={t.file}
+          aria-controls={`panel-${t.file}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? "0" : "-1"}
+          type="button"
+        >
+          <Icon name={t.icon} class="tab__icon" />
+          <span class="tab__name">{t.file}</span>
+          {t.closable && <span class="tab__close" aria-hidden="true">×</span>}
+        </button>
+      ))}
+    </div>
+
+    <div class="editor">
+      <div class="panel is-active" data-panel="about.ts" id="panel-about.ts" role="tabpanel" aria-labelledby="tab-about.ts" tabindex="0"><About /></div>
+      <div class="panel" data-panel="stack.json" id="panel-stack.json" role="tabpanel" aria-labelledby="tab-stack.json" tabindex="0" hidden><Stack /></div>
+      <div class="panel" data-panel="work" id="panel-work" role="tabpanel" aria-labelledby="tab-work" tabindex="0" hidden><Work /></div>
+      <div class="panel" data-panel="contact.sh" id="panel-contact.sh" role="tabpanel" aria-labelledby="tab-contact.sh" tabindex="0" hidden><Contact /></div>
+    </div>
+  </main>
+
+  <StatusBar />
+
+  <nav class="bottomnav" aria-label="Navegação">
+    {bottom.map((b, i) => (
+      <button
+        class="bnav"
+        data-file={b.file}
+        aria-selected={i === 0 ? "true" : "false"}
+        type="button"
+      >
+        <Icon name={b.icon} class="bnav__icon" />
+        <span class="bnav__label">{b.label}</span>
+      </button>
+    ))}
+  </nav>
+</div>
+
+<style>
+  /* ---- Mobile-first: editor app with bottom tabs ---- */
+  .workspace {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+  .main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .tabbar { display: none; }
+  .editor {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    padding: clamp(1.1rem, 4vw, 1.6rem);
+    padding-bottom: calc(var(--bottombar-h) + 1rem);
+    overflow: hidden;
+  }
+  .panel { height: 100%; min-height: 0; }
+  .panel:not([hidden]) { animation: panelin 0.26s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+  .bottomnav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--bottombar-h);
+    display: flex;
+    background: color-mix(in srgb, var(--ink-800) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    z-index: 60;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .bnav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--text-faint);
+    transition: color 0.16s ease;
+  }
+  .bnav__icon { width: 1.25rem; height: 1.25rem; }
+  .bnav[aria-selected="true"] { color: var(--mint); }
+
+  @keyframes panelin {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ---- Desktop: full IDE grid, no page scroll ---- */
+  @media (min-width: 769px) {
+    .workspace {
+      position: fixed;
+      inset: clamp(0px, 1.1vw, 16px);
+      display: grid;
+      grid-template-areas:
+        "titlebar titlebar"
+        "explorer main"
+        "statusbar statusbar";
+      grid-template-rows: var(--titlebar-h) 1fr var(--statusbar-h);
+      grid-template-columns: var(--explorer-w) 1fr;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--ink-850);
+      box-shadow: 0 40px 120px -50px rgba(0, 0, 0, 0.95);
+    }
+    .main { grid-area: main; }
+    .tabbar {
+      display: flex;
+      height: var(--tabbar-h);
+      flex: none;
+      align-items: stretch;
+      background: var(--ink-750);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+    .editor { padding-bottom: clamp(1.4rem, 2.5vw, 2rem); }
+    .bottomnav { display: none; }
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0 0.9rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--text-dim);
+    border-right: 1px solid var(--line);
+    border-top: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.16s ease, background 0.16s ease;
+  }
+  .tab__icon { width: 1em; height: 1em; color: var(--text-faint); }
+  .tab__close { color: var(--text-faint); font-size: 1.1em; line-height: 1; padding-left: 0.2rem; }
+  .tab:hover { color: var(--text); background: color-mix(in srgb, var(--ink-700) 60%, transparent); }
+  .tab[aria-selected="true"] {
+    color: var(--text);
+    background: var(--ink-700);
+    border-top-color: var(--mint);
+  }
+  .tab[aria-selected="true"] .tab__icon { color: var(--mint); }
+</style>

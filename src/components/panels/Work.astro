@@ -1,0 +1,102 @@
+---
+import { Icon } from "astro-icon/components";
+
+// work/ — projects framed as repos. Real links; refine os blurbs como quiser.
+const projects = [
+  {
+    id: "theosia",
+    name: "theosia",
+    blurb: "Projeto web autoral. (Ajuste com o que o Theosia realmente faz.)",
+    tags: ["Web", "TypeScript"],
+    live: "https://theosia.fun",
+    repo: "#",
+  },
+  {
+    id: "pacer",
+    name: "pacer",
+    blurb: "Gestão para pequenas lojas. Auth multi-tenant com RLS no Supabase, deploy na Vercel.",
+    tags: ["Next.js", "Supabase", "TypeScript"],
+    live: "https://pacer.digital",
+    repo: "#",
+  },
+  {
+    id: "unchess",
+    name: "unchess",
+    blurb: "Experiência de xadrez na web. (Ajuste com o que o Unchess realmente faz.)",
+    tags: ["Web", "Realtime"],
+    live: "https://unchess.viriato.site",
+    repo: "#",
+  },
+];
+---
+
+<div class="work">
+  <p class="eyebrow"><Icon name="lucide:folder-open" /> ~/work — selecionados</p>
+  <ul class="work__list">
+    {projects.map((p) => (
+      <li class="card" id={`proj-${p.id}`} tabindex="-1">
+        <div class="card__head">
+          <h3 class="card__name"><span class="card__slash">/</span>{p.name}</h3>
+          <div class="card__links">
+            <a href={p.live} target="_blank" rel="noopener noreferrer" class="card__link" aria-label={`Abrir ${p.name} ao vivo`}>
+              live <Icon name="lucide:external-link" />
+            </a>
+            <a href={p.repo} class="card__link card__link--muted" aria-label={`Código de ${p.name}`}>
+              <Icon name="lucide:github" /> código
+            </a>
+          </div>
+        </div>
+        <p class="card__blurb">{p.blurb}</p>
+        <ul class="card__tags">
+          {p.tags.map((t) => <li>{t}</li>)}
+        </ul>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .work { height: 100%; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+  .work__list {
+    list-style: none;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .card {
+    background: color-mix(in srgb, var(--ink-800) 60%, transparent);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .card:hover, .card:focus-visible {
+    border-color: var(--mint-dim);
+    background: var(--ink-700);
+    transform: translateY(-2px);
+  }
+  .card.is-target { border-color: var(--mint); box-shadow: 0 0 0 1px var(--mint); }
+  .card__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .card__name { font-family: var(--font-mono); font-size: var(--step-1); color: var(--text); }
+  .card__slash { color: var(--mint); }
+  .card__links { display: flex; gap: 1rem; font-family: var(--font-mono); font-size: var(--step--1); }
+  .card__link { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--mint); transition: opacity 0.15s ease; }
+  .card__link--muted { color: var(--text-dim); }
+  .card__link:hover { opacity: 0.7; }
+  .card__link svg { width: 1em; height: 1em; }
+  .card__blurb { color: var(--text-dim); margin: 0.5rem 0 0.8rem; max-width: 60ch; font-size: var(--step--1); }
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+  }
+  .card__tags li { border: 1px solid var(--ink-600); border-radius: 6px; padding: 0.15rem 0.5rem; }
+</style>

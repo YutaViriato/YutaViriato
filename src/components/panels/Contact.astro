@@ -1,0 +1,134 @@
+---
+import { Icon } from "astro-icon/components";
+
+// contact.sh — channels framed as a colored shell session, topped by an ASCII banner.
+const email = "ola@viriato.site";
+const banner = String.raw`__     ___      _       _
+\ \   / (_)_ __(_) __ _| |_ ___
+ \ \ / /| | '__| |/ _' | __/ _ \
+  \ V / | | |  | | (_| | || (_) |
+   \_/  |_|_|  |_|\__,_|\__\___/`;
+
+const socials = [
+  { label: "GitHub", handle: "@viriato", href: "https://github.com/", icon: "lucide:github", tone: "var(--syn-name)" },
+  { label: "LinkedIn", handle: "in/viriato", href: "https://linkedin.com/", icon: "lucide:linkedin", tone: "var(--syn-key)" },
+  { label: "X", handle: "@viriato", href: "https://x.com/", icon: "simple-icons:x", tone: "var(--text)" },
+];
+---
+
+<div class="contact">
+  <pre class="banner" aria-hidden="true">{banner}</pre>
+
+  <div class="term">
+    <p class="cmd">
+      <span class="cmd__user">viriato</span><span class="cmd__at">@</span><span class="cmd__host">site</span><span class="cmd__sep">:</span><span class="cmd__path">~</span><span class="cmd__dollar">$</span>
+      <span class="cmd__txt">mail --to</span>
+    </p>
+    <a class="mail" href={`mailto:${email}`}>
+      <Icon name="lucide:mail" class="mail__icon" />
+      <span class="mail__addr">{email}</span>
+      <span class="mail__hint">↵ enviar</span>
+    </a>
+
+    <p class="cmd">
+      <span class="cmd__user">viriato</span><span class="cmd__at">@</span><span class="cmd__host">site</span><span class="cmd__sep">:</span><span class="cmd__path">~</span><span class="cmd__dollar">$</span>
+      <span class="cmd__txt">open ./redes</span>
+    </p>
+    <ul class="socials">
+      {socials.map((s) => (
+        <li>
+          <a href={s.href} target="_blank" rel="me noopener noreferrer">
+            <Icon name={s.icon} class="socials__icon" style={`color:${s.tone}`} />
+            <span class="socials__meta">
+              <span class="socials__label">{s.label}</span>
+              <span class="socials__handle">{s.handle}</span>
+            </span>
+            <Icon name="lucide:arrow-up-right" class="socials__go" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .contact { height: 100%; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+  .banner {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(0.42rem, 0.2rem + 1.1vw, 0.8rem);
+    line-height: 1.15;
+    white-space: pre;
+    overflow-x: auto;
+    font-weight: 700;
+    background: linear-gradient(100deg, var(--mint), var(--syn-name) 60%, var(--syn-key));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--mint) 30%, transparent));
+  }
+  .term { margin-top: 1.3rem; }
+  .cmd {
+    margin: 1rem 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.1rem;
+  }
+  .cmd:first-child { margin-top: 0; }
+  .cmd__user { color: var(--syn-str); }
+  .cmd__at, .cmd__sep { color: var(--text-faint); }
+  .cmd__host { color: var(--mint); }
+  .cmd__path { color: var(--syn-name); }
+  .cmd__dollar { color: var(--syn-key); margin: 0 0.4rem 0 0.15rem; }
+  .cmd__txt { color: var(--text-dim); }
+
+  .mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    align-self: flex-start;
+    padding: 0.75rem 1.1rem;
+    min-height: 48px;
+    background: var(--ink-800);
+    border: 1px solid var(--ink-600);
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    transition: border-color 0.18s ease;
+  }
+  .mail:hover { border-color: var(--mint); }
+  .mail__icon { width: 1.05em; height: 1.05em; color: var(--syn-prop); }
+  .mail__addr { color: var(--text); transition: color 0.18s ease; }
+  .mail__hint { color: var(--text-faint); font-size: var(--step--2); margin-left: 0.3rem; }
+  .mail:hover .mail__addr { color: var(--mint); }
+
+  .socials {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 0.6rem;
+  }
+  .socials a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    min-height: 56px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  }
+  .socials a:hover { border-color: var(--mint-dim); background: var(--ink-700); transform: translateY(-2px); }
+  .socials__icon { width: 1.3em; height: 1.3em; flex: none; }
+  .socials__meta { display: flex; flex-direction: column; gap: 0.1rem; flex: 1; }
+  .socials__label { font-family: var(--font-display); font-weight: 600; color: var(--text); }
+  .socials__handle { font-family: var(--font-mono); font-size: var(--step--1); color: var(--text-dim); }
+  .socials__go { width: 1em; height: 1em; color: var(--text-faint); transition: color 0.18s ease, transform 0.18s ease; }
+  .socials a:hover .socials__go { color: var(--mint); transform: translate(2px, -2px); }
+</style>
+

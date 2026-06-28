@@ -1,0 +1,125 @@
+---
+import { Icon } from "astro-icon/components";
+
+// File tree = navigation. Each item triggers a panel via data-file.
+// `tone` colors the icon by file type, VS Code style.
+const files = [
+  { file: "about.ts", label: "about.ts", icon: "lucide:file-code", tone: "var(--syn-name)" },
+  { file: "stack.json", label: "stack.json", icon: "lucide:braces", tone: "var(--syn-prop)" },
+];
+const work = [
+  { file: "work", target: "theosia", label: "theosia.tsx", icon: "lucide:file-code", tone: "var(--mint)" },
+  { file: "work", target: "pacer", label: "pacer.tsx", icon: "lucide:file-code", tone: "var(--mint)" },
+  { file: "work", target: "unchess", label: "unchess.tsx", icon: "lucide:file-code", tone: "var(--mint)" },
+];
+---
+
+<nav class="explorer" aria-label="Arquivos">
+  <p class="explorer__title">Explorer</p>
+  <ul class="tree" role="list">
+    <li class="tree__root">
+      <span class="tree__rootlabel"><Icon name="lucide:chevron-down" class="node__icon" /><span>VIRIATO</span></span>
+      <ul class="tree__group" role="list">
+        {files.map((f) => (
+          <li>
+            <button class="node" data-file={f.file} type="button">
+              <Icon name={f.icon} class="node__icon" style={`color:${f.tone}`} /><span>{f.label}</span>
+            </button>
+          </li>
+        ))}
+        <li>
+          <span class="node node--folder"><Icon name="lucide:folder-open" class="node__icon node__icon--folder" /><span>work</span></span>
+          <ul class="tree__group tree__group--nested" role="list">
+            {work.map((w) => (
+              <li>
+                <button class="node node--child" data-file={w.file} data-target={w.target} type="button">
+                  <Icon name={w.icon} class="node__icon" style={`color:${w.tone}`} /><span>{w.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </li>
+        <li>
+          <button class="node" data-file="contact.sh" type="button">
+            <Icon name="lucide:terminal" class="node__icon" style="color:var(--syn-str)" /><span>contact.sh</span>
+          </button>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  .explorer {
+    grid-area: explorer;
+    background: color-mix(in srgb, var(--ink-850) 70%, transparent);
+    border-right: 1px solid var(--line);
+    padding: 0.8rem 0.6rem;
+    overflow: auto;
+    font-family: var(--font-mono);
+  }
+  .explorer__title {
+    font-size: var(--step--2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0.2rem 0 0.7rem 0.5rem;
+  }
+  .tree, .tree__group { list-style: none; margin: 0; padding: 0; }
+  .tree__rootlabel {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: var(--step--1); color: var(--text-dim); font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.36rem 0.5rem; /* depth 0 */
+  }
+  .tree__group--nested { position: relative; }
+  .tree__group--nested::before {
+    content: ""; position: absolute;
+    left: 1.85rem; top: 0.1rem; bottom: 0.1rem;
+    width: 1px; background: var(--line);
+  }
+
+  .node {
+    width: 100%;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.36rem 0.5rem 0.36rem 1.5rem; /* depth 1 */
+    border-radius: 6px;
+    font-size: var(--step--1);
+    color: var(--text-dim);
+    text-align: left;
+    position: relative;
+    transition: color 0.14s ease, background 0.14s ease;
+  }
+  .node--child { padding-left: 2.45rem; } /* depth 2 */
+  .node--folder { cursor: default; color: var(--text-dim); }
+  .node:hover { color: var(--text); background: var(--ink-700); }
+  .node__icon { width: 1.05em; height: 1.05em; flex: none; color: var(--text-faint); }
+  .node__icon--folder { color: var(--syn-prop); }
+  .node[aria-current="true"] {
+    color: var(--mint);
+    background: color-mix(in srgb, var(--mint) 10%, transparent);
+  }
+  .node[aria-current="true"]::before {
+    content: ""; position: absolute; left: 0; top: 4px; bottom: 4px;
+    width: 2px; border-radius: 2px; background: var(--mint);
+  }
+  .node[aria-current="true"] .node__icon { color: var(--mint); }
+
+  /* boot stagger */
+  .explorer .node, .tree__rootlabel, .node--folder {
+    opacity: 0; transform: translateX(-6px);
+    animation: slidein 0.3s ease forwards;
+  }
+  .tree__rootlabel { animation-delay: 0.15s; }
+  .tree li:nth-child(1) .node { animation-delay: 0.22s; }
+  .tree li:nth-child(2) .node { animation-delay: 0.29s; }
+  .node--folder { animation-delay: 0.36s; }
+  .tree__group--nested li:nth-child(1) .node { animation-delay: 0.42s; }
+  .tree__group--nested li:nth-child(2) .node { animation-delay: 0.48s; }
+  .tree__group--nested li:nth-child(3) .node { animation-delay: 0.54s; }
+  @keyframes slidein { to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .explorer .node, .tree__rootlabel, .node--folder { opacity: 1; transform: none; animation: none; }
+  }
+</style>

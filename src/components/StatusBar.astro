@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<footer class="statusbar">
+  <span class="seg seg--accent"><Icon name="lucide:git-branch" /> main</span>
+  <span class="seg seg--lang" id="status-lang">TypeScript</span>
+  <span class="seg seg--pos" id="status-pos">Ln 6, Col 1</span>
+  <span class="seg seg--zap" aria-hidden="true"><Icon name="lucide:zap" /></span>
+</footer>
+
+<style>
+  .statusbar {
+    grid-area: statusbar;
+    height: var(--statusbar-h);
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding-inline: 0.9rem;
+    background: var(--ink-800);
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--text-faint);
+    overflow: hidden;
+  }
+  .seg { display: inline-flex; align-items: center; gap: 0.35rem; white-space: nowrap; }
+  .seg svg { width: 1em; height: 1em; }
+  .seg--accent { color: var(--mint); }
+  .seg--pos { margin-left: auto; }
+  .seg--zap { color: var(--syn-prop); }
+  .seg--zap svg { animation: zap 3s ease-in-out infinite; }
+  @keyframes zap {
+    0%, 92%, 100% { opacity: 0.5; transform: scale(1); }
+    96% { opacity: 1; transform: scale(1.2); }
+  }
+  @media (max-width: 540px) {
+    .seg--lang { display: none; }
+    .statusbar { gap: 0.9rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seg--zap svg { animation: none; }
+  }
+</style>
